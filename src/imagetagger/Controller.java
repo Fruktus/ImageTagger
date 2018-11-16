@@ -126,6 +126,7 @@ public class Controller { //might rename later
         }
         switch((CommandAction)params[0]){
             case SET_SRC:
+                //if someone deleted the folder before?
                 //this.SrcFolder = new File((String) params[1]);
             break;
             
@@ -134,19 +135,21 @@ public class Controller { //might rename later
             break;
             
             case IMG_IDX:
-                //params structure for this one:
-                //IMG_IDX mode subfolder filename index
+                //params structure for this one: (mode taken from current state, as changes will be tracked as well)
+                //IMG_IDX subfolder filename index
+                
                 //src and target as in controller, will be handled by separate actions
                 //mode means copy or move, no delete since i have no idea how to handle restoring it
                 //this.currentFile = (Integer) params[1];
                 //this.mw.setImage(this.getCurrentFile());
+                //depending on move/copy (should be in params) return the file to original folder or delete copy
                 if(params[1].equals("s")){
                     this.currentFile = (Integer) params[2]; //todo: must use getprevious or smth since jumps lengths are undefined
                     this.mw.setImage(this.getCurrentFile());
                 }else if(params[1].equals("c")){
                     try {
                         Files.delete(Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]));
-                        this.currentFile = (Integer) params[4]; //should be no problem with negative since i only push when i increase
+                        this.currentFile = (Integer) params[4];
                         this.processed -= 1;
                         this.mw.setProcessedLabel(this.processed.toString());
                         this.mw.setImage(this.getCurrentFile());
@@ -159,13 +162,14 @@ public class Controller { //might rename later
                 }else{ //image was moved
                     try {
                         Files.move(Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]), Paths.get(this.SrcFolder.getAbsolutePath()));
-                        this.currentFile -= 1;
+                        this.currentFile = (Integer) params[4];
+                        this.processed -= 1;
+                        this.mw.setProcessedLabel(this.processed.toString());
                         this.mw.setImage(this.getCurrentFile());
                     } catch (IOException ex) {
                         Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                //depending on move/copy (should be in params) return the file to original folder or delete copy
             break;
                     
             case  IMG_MD: //state change
@@ -201,17 +205,15 @@ public class Controller { //might rename later
             break;
             
             case IMG_IDX: //fix!
-                this.currentFile = (Integer) params[1];
-                this.processed += 1;
-                this.mw.setProcessedLabel(this.processed.toString());
-                this.mw.setImage(this.getCurrentFile());
                 if(params[1].equals("s")){
-                    this.currentFile += 1;
+                    this.currentFile = (Integer) params[2]; //todo: must use getprevious or smth since jumps lengths are undefined
                     this.mw.setImage(this.getCurrentFile());
-                }/*else if(params[1].equals("c")){
+                }else if(params[1].equals("c")){
                     try {
                         Files.delete(Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]));
-                        this.currentFile -= 1; //should be no problem with negative since i only push when i increase
+                        this.currentFile = (Integer) params[4];
+                        this.processed -= 1;
+                        this.mw.setProcessedLabel(this.processed.toString());
                         this.mw.setImage(this.getCurrentFile());
                     } catch (NoSuchFileException x) {
                         System.err.format("%s: no such" + " file or directory%n", srcImages[currentFile].toPath());
@@ -222,12 +224,14 @@ public class Controller { //might rename later
                 }else{ //image was moved
                     try {
                         Files.move(Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]), Paths.get(this.SrcFolder.getAbsolutePath()));
-                        this.currentFile -= 1;
+                        this.currentFile = (Integer) params[4];
+                        this.processed -= 1;
+                        this.mw.setProcessedLabel(this.processed.toString());
                         this.mw.setImage(this.getCurrentFile());
                     } catch (IOException ex) {
                         Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }*/
+                }
             break;
             
             //params:
@@ -241,15 +245,16 @@ public class Controller { //might rename later
         }
     }
     
-
+    // TODO move all that to keypressaction or whatever its called in mainwindow
+    // and create more public methods in controller which would handle what this method does, but separately
     public void handleKeyShortcut(int num){ //rename? 
         if(num == 10){
-            System.out.println("undo not implemented");
+            //System.out.println("undo not fully implemented"); //debug info
             this.undo();
             return;
         }else if(num == 11){
-            System.out.println("redo not implemented");
-            //this.redo();
+            //System.out.println("redo not fully implemented"); //debug info
+            this.redo();
             return;
         }
         
@@ -382,7 +387,9 @@ public class Controller { //might rename later
         }
     }
     
+    
     //possibly surround with try catch for null excp and if occurs delete config
+    //or dont and trust that config is okay if exists (user error prone)
     
     
     private void loadConfig(){
@@ -394,13 +401,20 @@ public class Controller { //might rename later
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        //i assume that either config doesnt exist or is okay, if someone modded it and failed itll crash
         if(!"null".equals(this.config.getProperty("SrcFolder"))){
-            this.setSrcFolder(new File(this.config.getProperty("SrcFolder")));
-            this.currentFile = new Integer(this.config.getProperty("CurrentFile"));
+            File src = new File(this.config.getProperty("SrcFolder"));
+            if(src.isDirectory()){
+                this.setSrcFolder(src);
+                this.currentFile = new Integer(this.config.getProperty("CurrentFile"));   
+            }
         }
         
         if(!"null".equals(this.config.getProperty("DstFolder"))){
-            this.setDstFolder(new File(this.config.getProperty("DstFolder")));
+            File dst = new File(this.config.getProperty("DstFolder"));
+            if(dst.isDirectory()){
+                 this.setDstFolder(dst);
+            }
         }
         
         this.mw.setMode(this.config.getProperty("Mode"));
