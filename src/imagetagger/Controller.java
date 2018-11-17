@@ -161,7 +161,7 @@ public class Controller { //might rename later
                     }
                 }else{ //image was moved
                     try {
-                        Files.move(Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]), Paths.get(this.SrcFolder.getAbsolutePath()));
+                        Files.move(Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]), Paths.get(this.SrcFolder.getAbsolutePath() + "/" + params[3]));
                         this.currentFile = (Integer) params[4];
                         this.processed -= 1;
                         this.mw.setProcessedLabel(this.processed.toString());
@@ -223,7 +223,7 @@ public class Controller { //might rename later
                     }
                 }else{ //image was moved
                     try {
-                        Files.move(Paths.get(this.SrcFolder.getAbsolutePath()), Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]));
+                        Files.move(Paths.get(this.SrcFolder.getAbsolutePath() + "/" + params[3]), Paths.get(this.DstFolder.getAbsolutePath() + "/" + params[2] + "/" + params[3]));
                         this.currentFile = (Integer) params[4];
                         this.processed += 1;
                         this.mw.setProcessedLabel(this.processed.toString());
