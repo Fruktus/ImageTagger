@@ -406,7 +406,7 @@ public class Controller { //might rename later
             File src = new File(this.config.getProperty("SrcFolder"));
             if(src.isDirectory()){
                 this.setSrcFolder(src);
-                if(Integer.getInteger(config.getProperty("ProcessedFiles")) == srcImages.length){
+                if(new Integer(this.config.getProperty("ProcessedFiles")) == srcImages.length){
                     this.currentFile = new Integer(this.config.getProperty("CurrentFile")); 
                 }else{
                     currentFile = 0;
