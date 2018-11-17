@@ -58,10 +58,10 @@ public class Controller { //might rename later
         this.srcImages = SrcFolder.listFiles();
         this.currentFile = -1; //because of the way i handle getting next pictures
         this.mw.setSrcLabel(src.getAbsolutePath());
-        for (File srcImage : srcImages) {
+        //for (File srcImage : srcImages) {
             //debug info
-            System.out.println("src: " + srcImage);
-        }
+        //    System.out.println("src: " + srcImage);
+        //}
         //this.cmd.addCommand(new String[]{"SET_SRC", this.SrcFolder.getAbsolutePath()});
         if(this.getNextFile() != null){
             this.mw.setImage(this.getCurrentFile());
@@ -85,7 +85,7 @@ public class Controller { //might rename later
     public File getCurrentFile(){
         System.out.println("currentfile: " + currentFile + " srclen:" + srcImages.length); //debug info
         if(srcImages.length == 0 || srcImages.length <= currentFile || SrcFolder == null){
-            System.out.println("getcurrentfile error"); //debug info
+            System.out.println("getcurrentfile error: index=" + currentFile); //debug info
             return null;
         }
         return srcImages[currentFile];
@@ -406,7 +406,11 @@ public class Controller { //might rename later
             File src = new File(this.config.getProperty("SrcFolder"));
             if(src.isDirectory()){
                 this.setSrcFolder(src);
-                this.currentFile = new Integer(this.config.getProperty("CurrentFile"));   
+                if(Integer.getInteger(config.getProperty("ProcessedFiles")) == srcImages.length){
+                    this.currentFile = new Integer(this.config.getProperty("CurrentFile")); 
+                }else{
+                    currentFile = 0;
+                }
             }
         }
         

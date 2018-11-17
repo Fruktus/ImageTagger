@@ -67,7 +67,7 @@ public class MainWindow extends javax.swing.JFrame implements ActionListener {
     }
     
     public long getElapsedTime(){
-        return System.currentTimeMillis() - this.startTime;
+        return System.currentTimeMillis() - this.startTime + this.elapsedTime;
     }
     
     public void setElapsedTime(long t){
