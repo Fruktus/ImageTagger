@@ -16,7 +16,7 @@ You can set your own labels, the pictures will be sorted to the folder with corr
 You can use ctrl-z and ctrl-y to undo/redo.
 
 If you chose to copy files and saved the progress, the program will automatically continue where you left of 
-if you hadn't modified files in the source folder.
+if you hadn't modified the files in the source folder.
 
 ## TODO
 - Debbuging
