@@ -1,5 +1,4 @@
 # ImageTagger
----
 This is a simple Java program I wrote in order to easily sort images by hand for machine learning purposes.
 
 ## Features
