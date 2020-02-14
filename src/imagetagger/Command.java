@@ -23,14 +23,6 @@ public class Command {
         this.maxSize = maxSize;
     }
     
-    /*
-    ll.removeFirst();
-      ll.removeLast();
-        ll.addFirst();
-        ll.addLast();
-        ll.size();
-    */
-    
     public void addCommand(Object[] params){ //should take enum corresponding to action and its parameters
         if(this.undo.size() > this.maxSize){
             this.undo.removeFirst();
