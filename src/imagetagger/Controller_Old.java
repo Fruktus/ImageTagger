@@ -27,24 +27,24 @@ import static javax.swing.JOptionPane.YES_OPTION;
  * Handles the files operations and showing them in JFrame
  * @author fruktus
  */
-public class Controller { //might rename later
+public class Controller_Old { //might rename later
     
     //maybe add and array of boxes (strings for shortcuts) or give it somehow access to jframe
     private File SrcFolder;
     private File DstFolder;
     private File[] srcImages;
     private Integer currentFile;
-    private final MainWindow mw;
+    private final MainWindow_Old mw;
     private final Properties config;
     private Integer processed;
-    private final Command cmd;
+    private final CommandManager cmd;
     
     
-    public Controller(MainWindow mw){
+    public Controller_Old(MainWindow_Old mw){
         this.SrcFolder = null; //for error checking if not set
         this.DstFolder = null;
         this.mw = mw;
-        this.cmd = new Command(20);
+        this.cmd = new CommandManager(20);
         this.processed = 0;
         config = new Properties();
         if(new File("./config.properties").isFile()){
@@ -167,7 +167,7 @@ public class Controller { //might rename later
                         this.mw.setProcessedLabel(this.processed.toString());
                         this.mw.setImage(this.getCurrentFile());
                     } catch (IOException ex) {
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             break;
@@ -229,7 +229,7 @@ public class Controller { //might rename later
                         this.mw.setProcessedLabel(this.processed.toString());
                         this.mw.setImage(this.getCurrentFile());
                     } catch (IOException ex) {
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             break;
@@ -350,7 +350,7 @@ public class Controller { //might rename later
                     }
                     Files.copy(Paths.get(this.getCurrentFile().getAbsolutePath()), Paths.get(t.getPath() + "/" +  this.getCurrentFile().getName()));
                     } catch (IOException ex) {
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }else{
                     try { //for ex permission error
@@ -372,7 +372,7 @@ public class Controller { //might rename later
                     
                     Files.move(Paths.get(srcImages[currentFile].getAbsolutePath()), Paths.get(t.getPath() + "/" +  this.getCurrentFile().getName()));
                     } catch (IOException ex) {
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 //IMG_IDX mode subfolder filename 
@@ -396,9 +396,9 @@ public class Controller { //might rename later
         try {
             config.load(new FileInputStream("./config.properties"));
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         //i assume that either config doesnt exist or is okay, if someone modded it and failed itll crash
@@ -464,7 +464,7 @@ public class Controller { //might rename later
         try {
             this.config.store(new FileWriter("./config.properties"), null);
         } catch (IOException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller_Old.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

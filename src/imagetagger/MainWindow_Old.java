@@ -25,8 +25,8 @@ import javax.swing.Timer;
  *
  * @author fruktus
  */
-public class MainWindow extends javax.swing.JFrame implements ActionListener {
-    private Controller ctrl;
+public class MainWindow_Old extends javax.swing.JFrame implements ActionListener {
+    private Controller_Old ctrl;
     private ImageIcon currentImage;
     private final long startTime;
     private long elapsedTime;
@@ -34,7 +34,7 @@ public class MainWindow extends javax.swing.JFrame implements ActionListener {
     /**
      * Creates new form MainWindow
      */
-    public MainWindow() {
+    public MainWindow_Old() {
         initComponents();
         
         Timer timer = new Timer(1000, this);
@@ -101,7 +101,7 @@ public class MainWindow extends javax.swing.JFrame implements ActionListener {
         return h + ":" + m + ":" + s;
     }
 
-    public void setController(Controller c){
+    public void setController(Controller_Old c){
         this.ctrl = c;
         
         //<editor-fold defaultstate="collapsed" desc=" KeyBindings setup ">
@@ -172,9 +172,9 @@ public class MainWindow extends javax.swing.JFrame implements ActionListener {
      */
     private class KeyAction extends AbstractAction { 
         private final int number;
-        private final Controller ctrl; 
+        private final Controller_Old ctrl;
 
-        KeyAction(int number, Controller ctrl) {
+        KeyAction(int number, Controller_Old ctrl) {
             this.number = number;
             this.ctrl = ctrl;
         }
